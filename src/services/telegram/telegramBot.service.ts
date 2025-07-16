@@ -49,6 +49,16 @@ export class TelegramBotService implements OnModuleInit {
     console.log("Telegram bot started successfully");
   }
 
+  async broadcastMessage(message: string, target?: string): Promise<void> {
+    const chatId = target || this.adminGroupId;
+    try {
+      await this.bot.telegram.sendMessage(chatId, message);
+    } catch (error) {
+      console.error("Failed to broadcast message:", error);
+      throw error;
+    }
+  }
+
   private setupCommands(): void {
     this.bot.command("ask", async (ctx) => {
       await this.logEngagement(ctx, "ask");

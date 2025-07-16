@@ -20,6 +20,49 @@ export class EventsService {
     });
   }
 
+  async getAllEvents(page: number = 1, limit: number = 10): Promise<any> {
+    const [events, total] = await this.eventRepository.findAndCount({
+      where: { active: true },
+      order: { eventDate: "DESC" },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      events,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async getUpcomingEvents(limit: number = 10): Promise<any> {
+    const events = await this.eventRepository.find({
+      where: {
+        active: true,
+        eventDate: { $gte: new Date() } as any,
+      },
+      order: { eventDate: "ASC" },
+      take: limit,
+    });
+
+    return { events };
+  }
+
+  async updateEvent(id: number, updateData: any): Promise<void> {
+    if (updateData.eventDate) {
+      updateData.eventDate = new Date(updateData.eventDate);
+    }
+    await this.eventRepository.update(id, updateData);
+  }
+
+  async deleteEvent(id: number): Promise<void> {
+    await this.eventRepository.delete(id);
+  }
+
   async createEvent(
     title: string,
     description: string,

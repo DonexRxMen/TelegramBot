@@ -18,6 +18,43 @@ export class ContentService {
     });
   }
 
+  async getContent(
+    type?: string,
+    limit: number = 10,
+    page: number = 1
+  ): Promise<any> {
+    const query = this.contentRepository
+      .createQueryBuilder("content")
+      .where("content.active = :active", { active: true })
+      .orderBy("content.createdAt", "DESC");
+
+    if (type) {
+      query.andWhere("content.type = :type", { type });
+    }
+
+    query.skip((page - 1) * limit).take(limit);
+
+    const [content, total] = await query.getManyAndCount();
+
+    return {
+      content,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async updateContent(id: number, updateData: any): Promise<void> {
+    await this.contentRepository.update(id, updateData);
+  }
+
+  async deleteContent(id: number): Promise<void> {
+    await this.contentRepository.delete(id);
+  }
+
   async addContent(
     title: string,
     url: string,
