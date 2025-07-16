@@ -20,7 +20,7 @@ export class AmaQuestion {
   @Column()
   username!: string;
 
-  @Column()
+  @Column({ default: false })
   answered!: boolean;
 
   @CreateDateColumn()

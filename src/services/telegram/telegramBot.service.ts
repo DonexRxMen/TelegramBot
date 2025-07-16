@@ -27,6 +27,11 @@ export class TelegramBotService implements OnModuleInit {
     }
     this.bot = new Telegraf<MyContext>(botToken);
 
+    this.bot.on("message", (ctx) => {
+      console.log("Chat ID:", ctx.chat.id);
+      console.log("Chat Type:", ctx.chat.type);
+    });
+
     const groupId = this.configService.get<string>("ADMIN_GROUP_ID");
     if (!groupId) {
       throw new Error("ADMIN_GROUP_ID is not defined in environment");
