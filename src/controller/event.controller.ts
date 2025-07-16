@@ -21,8 +21,7 @@ import {
 } from "@nestjs/swagger";
 import { EventsService } from "../services/evnet.service";
 import { CreateEventDto, UpdateEventDto } from "../Dtos/event.dto";
-
-// import { AdminGuard } from "../guards/admin.guard";
+import { AdminGuard } from "../guards/adminGuard";
 
 @ApiTags("Events Management")
 @Controller("api/events")
@@ -30,7 +29,7 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Create new event" })
   @ApiResponse({ status: 201, description: "Event created successfully" })
   async createEvent(@Body() createEventDto: CreateEventDto) {
@@ -97,7 +96,7 @@ export class EventsController {
   }
 
   @Put(":id")
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Update event" })
   @ApiParam({ name: "id", type: "number" })
   @ApiResponse({ status: 200, description: "Event updated successfully" })
@@ -117,7 +116,7 @@ export class EventsController {
   }
 
   @Delete(":id")
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Delete event" })
   @ApiParam({ name: "id", type: "number" })
   @ApiResponse({ status: 200, description: "Event deleted successfully" })

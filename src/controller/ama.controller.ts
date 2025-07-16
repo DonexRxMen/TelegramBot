@@ -21,6 +21,7 @@ import {
 } from "@nestjs/swagger";
 import { AmaService } from "../services/ama.service";
 import { CreateAmaQuestionDto, UpdateAmaQuestionDto } from "../Dtos/amo.dto";
+import { AdminGuard } from "../guards/adminGuard";
 
 @ApiTags("AMA Questions")
 @Controller("api/ama")
@@ -51,7 +52,7 @@ export class AmaController {
   }
 
   @Get("questions")
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Get all AMA questions" })
   @ApiQuery({ name: "answered", required: false, type: "boolean" })
   @ApiQuery({ name: "page", required: false, type: "number" })
@@ -61,7 +62,7 @@ export class AmaController {
     @Query("answered") answered?: boolean,
     @Query("page") page: number = 1,
     @Query("limit") limit: number = 10
-  ) {
+  ): Promise<any> {
     try {
       if (answered !== undefined) {
         if (answered) {
@@ -120,7 +121,7 @@ export class AmaController {
   }
 
   @Delete("questions/:id")
-//   @UseGuards(AdminGuard)
+  //   @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Delete AMA question" })
   @ApiParam({ name: "id", type: "number" })
   @ApiResponse({ status: 200, description: "Question deleted successfully" })

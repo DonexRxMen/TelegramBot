@@ -48,11 +48,17 @@ export class ContentService {
   }
 
   async updateContent(id: number, updateData: any): Promise<void> {
-    await this.contentRepository.update(id, updateData);
+    const result = await this.contentRepository.update(id, updateData);
+    if (result.affected === 0) {
+      throw new Error("Content not found");
+    }
   }
 
   async deleteContent(id: number): Promise<void> {
-    await this.contentRepository.delete(id);
+    const result = await this.contentRepository.delete(id);
+    if (result.affected === 0) {
+      throw new Error("Content not found");
+    }
   }
 
   async addContent(

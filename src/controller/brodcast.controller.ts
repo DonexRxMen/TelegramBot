@@ -9,12 +9,11 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { TelegramBotService } from "../services/telegram/telegramBot.service";
 import { BroadcastMessageDto } from "../Dtos/brodcast.dto";
-
-// import { AdminGuard } from "../guards/admin.guard";
+import { AdminGuard } from "../guards/adminGuard";
 
 @ApiTags("Broadcast")
 @Controller("api/broadcast")
-// @UseGuards(AdminGuard)
+@UseGuards(AdminGuard)
 export class BroadcastController {
   constructor(private readonly telegramBotService: TelegramBotService) {}
 

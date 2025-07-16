@@ -21,7 +21,7 @@ import {
 } from "@nestjs/swagger";
 import { ContentService } from "../services/content.service";
 import { CreateContentDto, UpdateContentDto } from "../Dtos/content.dto";
-// import { AdminGuard } from "../guards/admin.guard";
+import { AdminGuard } from "../guards/adminGuard";
 
 @ApiTags("Content Management")
 @Controller("api/content")
@@ -29,7 +29,7 @@ export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
   @Post()
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Add new content" })
   @ApiResponse({ status: 201, description: "Content created successfully" })
   async createContent(@Body() createContentDto: CreateContentDto) {
@@ -96,7 +96,7 @@ export class ContentController {
   }
 
   @Put(":id")
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Update content" })
   @ApiParam({ name: "id", type: "number" })
   @ApiResponse({ status: 200, description: "Content updated successfully" })
@@ -116,7 +116,7 @@ export class ContentController {
   }
 
   @Delete(":id")
-  //   @UseGuards(AdminGuard)
+  @UseGuards(AdminGuard)
   @ApiOperation({ summary: "Delete content" })
   @ApiParam({ name: "id", type: "number" })
   @ApiResponse({ status: 200, description: "Content deleted successfully" })

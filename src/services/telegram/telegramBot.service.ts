@@ -49,12 +49,36 @@ export class TelegramBotService implements OnModuleInit {
     console.log("Telegram bot started successfully");
   }
 
-  async broadcastMessage(message: string, target?: string): Promise<void> {
-    const chatId = target || this.adminGroupId;
+  async broadcastMessage(
+    message: string,
+    target: string = "channel"
+  ): Promise<void> {
+    let chatId: string;
+
+    switch (target) {
+      case "channel":
+        chatId = this.configService.get<string>("RXMEN_CHANNEL_ID") || "";
+        break;
+      case "lounge":
+        chatId = this.configService.get<string>("MENS_HEALTH_LOUNGE_ID") || "";
+        break;
+      case "admin":
+        chatId = this.configService.get<string>("ADMIN_GROUP_ID") || "";
+        break;
+      default:
+        chatId = this.configService.get<string>("RXMEN_CHANNEL_ID") || "";
+    }
+
+    if (!chatId) {
+      throw new Error(`Chat ID not configured for target: ${target}`);
+    }
+
     try {
-      await this.bot.telegram.sendMessage(chatId, message);
+      await this.bot.telegram.sendMessage(chatId, message, {
+        parse_mode: "HTML",
+      });
     } catch (error) {
-      console.error("Failed to broadcast message:", error);
+      console.error("Error broadcasting message:", error);
       throw error;
     }
   }

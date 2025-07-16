@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { ConfigService } from "@nestjs/config";
-import { TelegramBotService } from "./telegramBot.service";
-import { EventsService } from "../evnet.service";
+import { TelegramBotService } from "./telegram/telegramBot.service";
+import { EventsService } from "./evnet.service";
 
 @Injectable()
 export class SchedulerService {

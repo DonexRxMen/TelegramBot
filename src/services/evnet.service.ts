@@ -56,13 +56,18 @@ export class EventsService {
     if (updateData.eventDate) {
       updateData.eventDate = new Date(updateData.eventDate);
     }
-    await this.eventRepository.update(id, updateData);
+    const result = await this.eventRepository.update(id, updateData);
+    if (result.affected === 0) {
+      throw new Error("Event not found");
+    }
   }
 
   async deleteEvent(id: number): Promise<void> {
-    await this.eventRepository.delete(id);
+    const result = await this.eventRepository.delete(id);
+    if (result.affected === 0) {
+      throw new Error("Event not found");
+    }
   }
-
   async createEvent(
     title: string,
     description: string,

@@ -8,11 +8,11 @@ import {
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
 import { EngagementService } from "../services/engagement.service";
-// import { AdminGuard } from '../guards/admin.guard';
+import { AdminGuard } from "../guards/adminGuard";
 
 @ApiTags("Analytics")
 @Controller("api/analytics")
-// @UseGuards(AdminGuard)
+@UseGuards(AdminGuard)
 export class AnalyticsController {
   constructor(private readonly engagementService: EngagementService) {}
 
